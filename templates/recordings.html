@@ -12,13 +12,13 @@
       <h1>Download Wav as MP3</h1>
       <div>Enter the uid, token and file you want to download: </div>
       <div>
-          <form method="POST">
+          <form action = "http://localhost:5000/recordings" method="POST" enctype = "multipart/form-data">
               <div class="form-group">
                   <textarea name="uid" cols="20" rows="1" class="form-control"></textarea>
                   <textarea name="token" cols="20" rows="1" class="form-control"></textarea>
-                  <textarea name="audio_file" cols="20" rows="1" class="form-control"></textarea>
+                  <input type = "file" name="audio_file">
               </div>
-                  <button type="submit" class="btn btn-success">Download!</button>
+                  <input type="submit">
               </div>
           </form>
       </div>

@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/'
 app.config['SQLALCHEMY_TRACK_MODIFICATEION'] = False
 app.config['JSON_SORT_KEYS'] = False
-app.config['UPLOAD_FOLDER'] = 'audio_files'
+app.config['UPLOAD_FOLDER'] = '/home/a/Dev/own_projects/to_mp3/audio_files'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -41,8 +41,8 @@ class Recording(db.Model):
     recording_id = db.Column(db.String(32), unique=True, nullable=False)
     filename = db.Column(db.String(150), nullable=False)
 
-    def __init__(self, user_id: int, uid: str, recording_id: str, filename: str) -> None:
-        self.user_id = user_id
+    def __init__(self, uid: str, recording_id: str, filename: str) -> None:
+        # self.user_id = user_id
         self.uid = uid
         self.recording_id = recording_id
         self.filename = filename
@@ -69,20 +69,20 @@ def create_user():
     return jsonify({'uid': uid, 'token': token})
 
 
-# @app.route('/recordings', methods=['GET'])
-# def recordings_page():
-#     return render_template('recordings.html')
+@app.route('/recordings', methods=['GET'])
+def recordings_page():
+    return render_template('recordings.html')
 
 @app.route('/recordings', methods=['POST'])
 def add_recording():
     
-    # uid = request.form['uid']
-    # token = request.form['token']
-    # audio_file = request.form['audio_file']
+    uid = request.form['uid']
+    token = request.form['token']
+    audio_file = request.files['audio_file']
 
-    uid = request.json.get('uid')
-    token = request.json.get('token')
-    audio_file = request.files.get('audio_file')
+    # uid = request.json.get('uid')
+    # token = request.json.get('token')
+    # audio_file = request.files.get('audio_file')
     
     if not uid:
         return jsonify({'error': 'Укажите uid'})
@@ -111,8 +111,9 @@ def add_recording():
 
 @app.route('/record', methods=['GET'])
 def download_recording():
-    recording_id = request.args.get('recording_id')
-    uid = request.args.get('uid')
+    recording_id = request.args.get('id')
+    uid = request.args.get('user')
+    print(recording_id, uid)
 
     if not recording_id:
         return jsonify({'Ошибка': 'Укажите recording_id'}), 400
@@ -121,10 +122,11 @@ def download_recording():
     
     try:
         recording = Recording.query.filter_by(recording_id=recording_id, uid=uid)
+        print(recording)
     except NoResultFound:
         return jsonify({'Ошибка': 'Такая запись не найдена'}), 404
     
-    audio_path = os.path.join(app.config['UPLOAD_FOLDER'], recording.filename)
+    audio_path = os.path.join(app.config['UPLOAD_FOLDER'], recording)
 
     return app.send_static_file(audio_path)
 
