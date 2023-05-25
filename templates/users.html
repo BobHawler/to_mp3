@@ -9,15 +9,13 @@
 </head>
 <body>
   <div class="container">
-      <h1>Download Wav as MP3</h1>
-      <div>Enter the uid, token and file you want to download: </div>
+      <h1>Create user</h1>
+      <div>Enter username: </div>
       <div>
-          <form action = "http://localhost:5000/recordings" method="POST" enctype = "multipart/form-data">
+          <form action = "http://localhost:5000/users" method="POST" enctype = "multipart/form-data">
               <div class="form-group">
-                  <textarea name="uid" cols="20" rows="1" placeholder="uid"></textarea><br>
-                  <textarea name="token" cols="20" rows="1" placeholder="token"></textarea><br>
-                  <input type = "file" name="audio_file" type="button" class="btn btn-outline-primary" value="Выбрать файл">
-                </div>
+                  <textarea name="username" cols="20" rows="1" class="form-control"></textarea>
+              </div>
                   <input type="submit" class="btn btn-primary" value="Отправить">
               </div>
           </form>
