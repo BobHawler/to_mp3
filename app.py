@@ -52,12 +52,12 @@ class Recording(db.Model):
 
 
 @app.route('/users', methods=['GET'])
-def users_page():
+def users_page() -> str:
     return render_template('users.html')
 
 
 @app.route('/users', methods=['POST'])
-def create_user():
+def create_user() -> str:
     username = request.form['username']
     if not username:
         return jsonify({'Ошибка': 'Укажите username'}), 400
@@ -75,12 +75,12 @@ def create_user():
 
 
 @app.route('/recordings', methods=['GET'])
-def recordings_page():
+def recordings_page() -> str:
     return render_template('recordings.html')
 
 
 @app.route('/recordings', methods=['POST'])
-def add_recording():
+def add_recording() -> str:
 
     uid = request.form['uid']
     token = request.form['token']
@@ -117,7 +117,7 @@ def add_recording():
 
 
 @app.route('/record', methods=['GET'])
-def download_recording():
+def download_recording() -> str:
     recording_id = request.args.get('id')
     uid = request.args.get('user')
 
